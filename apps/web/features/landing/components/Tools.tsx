@@ -1,13 +1,14 @@
 "use client";
-import googleAnalytics from "@shared/assets/google_analytics.webp";
-import hubspot from "@shared/assets/hubspot.webp";
+import appstle from "@shared/assets/appstle.webp";
+import canva from "@shared/assets/canva.webp";
+import figma from "@shared/assets/figma.webp";
+import googleAnalytics from "@shared/assets/googleAnalytics.webp";
 import klaviyo from "@shared/assets/klaviyo.webp";
-import mailchimp from "@shared/assets/mailchimp.webp";
-import notion from "@shared/assets/notion.webp";
-import omnisend from "@shared/assets/omnisend.webp";
+import openAI from "@shared/assets/openAI.webp";
 import shopify from "@shared/assets/shopify.webp";
-import wooCommerce from "@shared/assets/woo_commerce.webp";
-import zapier from "@shared/assets/zapier.webp";
+import tripleWhale from "@shared/assets/tripleWhale.webp";
+import trustpilot from "@shared/assets/trustpilot.webp";
+import typeform from "@shared/assets/typeform.webp";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Image, { StaticImageData } from "next/image";
@@ -17,16 +18,47 @@ if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
 }
 
-const tools: { name: string; src: StaticImageData; x: number; y: number; w: string; h: string; seed: number }[] = [
-  { name: "Klaviyo", src: klaviyo, x: 4, y: 8, w: "clamp(80px,8vw,128px)", h: "clamp(80px,8vw,128px)", seed: 0 },
-  { name: "Shopify", src: shopify, x: 30, y: 3, w: "clamp(72px,7.5vw,120px)", h: "clamp(72px,7.5vw,120px)", seed: 1 },
-  { name: "Mailchimp", src: mailchimp, x: 62, y: 5, w: "clamp(76px,8vw,124px)", h: "clamp(76px,8vw,124px)", seed: 2 },
-  { name: "HubSpot", src: hubspot, x: 83, y: 10, w: "clamp(150px,16vw,240px)", h: "clamp(50px,5.3vw,80px)", seed: 3 },
-  { name: "WooCommerce", src: wooCommerce, x: 78, y: 48, w: "clamp(150px,16vw,240px)", h: "clamp(50px,5.3vw,80px)", seed: 4 },
-  { name: "Omnisend", src: omnisend, x: 79, y: 78, w: "clamp(150px,16vw,240px)", h: "clamp(50px,5.3vw,80px)", seed: 5 },
-  { name: "Zapier", src: zapier, x: 54, y: 84, w: "clamp(150px,16vw,240px)", h: "clamp(50px,5.3vw,80px)", seed: 6 },
-  { name: "Google Analytics", src: googleAnalytics, x: 22, y: 83, w: "clamp(130px,13vw,200px)", h: "clamp(65px,6.5vw,100px)", seed: 7 },
-  { name: "Notion", src: notion, x: 3, y: 65, w: "clamp(72px,7.5vw,120px)", h: "clamp(72px,7.5vw,120px)", seed: 8 }
+type Tool = {
+  name: string;
+  src: StaticImageData;
+  x: number;
+  y: number;
+  w: string;
+  h: string;
+  seed: number;
+  mx: number;
+  my: number;
+  mw: string;
+  mh: string;
+  /** Square logos (e.g. Canva, Appstle) — assets are 1000×1000 with rounded corners. */
+  rounded?: boolean;
+};
+
+const wide = {
+  w: "clamp(180px,19vw,280px)",
+  h: "clamp(60px,6.3vw,94px)",
+  mw: "clamp(128px,34vw,176px)",
+  mh: "clamp(44px,12vw,58px)"
+} as const;
+
+const square = {
+  w: "clamp(64px,6.5vw,96px)",
+  h: "clamp(64px,6.5vw,96px)",
+  mw: "clamp(48px,13vw,64px)",
+  mh: "clamp(48px,13vw,64px)"
+} as const;
+
+const tools: Tool[] = [
+  { name: "Klaviyo", src: klaviyo, x: 3, y: 7, seed: 0, mx: 2, my: 5, ...wide },
+  { name: "Shopify", src: shopify, x: 28, y: 2, seed: 1, mx: 52, my: 4, ...wide },
+  { name: "Canva", src: canva, x: 54, y: 4, seed: 2, mx: 40, my: 7, ...square, rounded: true },
+  { name: "OpenAI", src: openAI, x: 76, y: 7, seed: 3, mx: 54, my: 22, ...wide },
+  { name: "Figma", src: figma, x: 82, y: 24, seed: 4, mx: 4, my: 24, ...wide },
+  { name: "Google Analytics", src: googleAnalytics, x: 79, y: 44, seed: 5, mx: 52, my: 68, ...wide },
+  { name: "Triple Whale", src: tripleWhale, x: 74, y: 64, seed: 6, mx: 34, my: 86, ...wide },
+  { name: "Trustpilot", src: trustpilot, x: 50, y: 80, seed: 7, mx: 4, my: 86, ...wide },
+  { name: "Typeform", src: typeform, x: 20, y: 78, seed: 8, mx: 54, my: 84, ...wide },
+  { name: "Appstle", src: appstle, x: 2, y: 42, seed: 9, mx: 4, my: 68, ...square, rounded: true }
 ];
 
 function seededVal(seed: number, index: number): number {
@@ -45,33 +77,20 @@ export default function Tools() {
   const sectionRef = useRef<HTMLElement>(null);
   const layerRef = useRef<HTMLDivElement>(null);
   const itemRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const badgeRef = useRef<HTMLSpanElement>(null);
   const headingRef = useRef<HTMLHeadingElement>(null);
-  const paraRef = useRef<HTMLParagraphElement>(null);
 
   useEffect(() => {
     const section = sectionRef.current;
-    const layer = layerRef.current;
-    const items = itemRefs.current.filter((el): el is HTMLDivElement => el !== null);
-    if (!section || !layer || items.length === 0) {
+    if (!section) {
       return;
     }
 
     const ctx = gsap.context(() => {
-      const layerRect = layer.getBoundingClientRect();
-      const cx = layerRect.left + layerRect.width / 2;
-      const cy = layerRect.top + layerRect.height / 2;
+      const layer = layerRef.current;
+      const items = itemRefs.current.filter((el): el is HTMLDivElement => el !== null);
 
-      // Start each icon collapsed at the center of the section.
-      items.forEach((el) => {
-        const r = el.getBoundingClientRect();
-        gsap.set(el, {
-          x: cx - (r.left + r.width / 2),
-          y: cy - (r.top + r.height / 2),
-          scale: 0,
-          opacity: 0,
-          rotate: gsap.utils.random(-45, 45)
-        });
-      });
+      gsap.set([badgeRef.current, headingRef.current].filter(Boolean), { y: 32, opacity: 0 });
 
       const tl = gsap.timeline({
         scrollTrigger: {
@@ -81,27 +100,44 @@ export default function Tools() {
         }
       });
 
-      tl.to(items, {
-        x: 0,
-        y: 0,
-        scale: 1,
-        opacity: 1,
-        rotate: 0,
-        duration: 0.9,
-        ease: "back.out(1.4)",
-        stagger: { each: 0.06, from: "random" }
-      });
+      if (layer && items.length > 0) {
+        const layerRect = layer.getBoundingClientRect();
+        const cx = layerRect.left + layerRect.width / 2;
+        const cy = layerRect.top + layerRect.height / 2;
 
-      tl.from(
-        [headingRef.current, paraRef.current],
+        items.forEach((el) => {
+          const r = el.getBoundingClientRect();
+          gsap.set(el, {
+            x: cx - (r.left + r.width / 2),
+            y: cy - (r.top + r.height / 2),
+            scale: 0,
+            opacity: 0,
+            rotate: gsap.utils.random(-45, 45)
+          });
+        });
+
+        tl.to(items, {
+          x: 0,
+          y: 0,
+          scale: 1,
+          opacity: 1,
+          rotate: 0,
+          duration: 0.9,
+          ease: "back.out(1.4)",
+          stagger: { each: 0.06, from: "random" }
+        });
+      }
+
+      tl.to(
+        [badgeRef.current, headingRef.current].filter(Boolean),
         {
-          y: 32,
-          opacity: 0,
+          y: 0,
+          opacity: 1,
           duration: 0.6,
-          stagger: 0.15,
+          stagger: 0.12,
           ease: "power3.out"
         },
-        "-=0.35"
+        items.length > 0 ? "-=0.35" : 0
       );
     }, section);
 
@@ -130,9 +166,22 @@ export default function Tools() {
           25%      { transform: translate(-3px,-5px) rotate(1deg); }
           75%      { transform: translate(4px,3px) rotate(-1.5deg); }
         }
+        .tools-item {
+          left: var(--x);
+          top: var(--y);
+          width: var(--w);
+          height: var(--h);
+        }
+        @media (max-width: 640px) {
+          .tools-item {
+            left: var(--mx);
+            top: var(--my);
+            width: var(--mw);
+            height: var(--mh);
+          }
+        }
       `}</style>
 
-      {/* Scattered icons — absolutely positioned */}
       <div ref={layerRef} className="absolute inset-0">
         {tools.map((tool, index) => (
           <div
@@ -140,32 +189,46 @@ export default function Tools() {
             ref={(el) => {
               itemRefs.current[index] = el;
             }}
-            className="absolute"
-            style={{
-              left: `${tool.x}%`,
-              top: `${tool.y}%`,
-              width: tool.w,
-              height: tool.h,
-              willChange: "transform"
-            }}
+            className="tools-item absolute"
+            data-cursor-text={tool.name}
+            style={
+              {
+                "--x": `${tool.x}%`,
+                "--y": `${tool.y}%`,
+                "--w": tool.w,
+                "--h": tool.h,
+                "--mx": `${tool.mx}%`,
+                "--my": `${tool.my}%`,
+                "--mw": tool.mw,
+                "--mh": tool.mh,
+                willChange: "transform"
+              } as React.CSSProperties
+            }
           >
             <div style={floatStyle(tool.seed)} className="size-full">
               <div className="flex size-full items-center justify-center p-3">
-                <Image src={tool.src} alt={tool.name} className="size-full object-contain" draggable={false} />
+                <Image src={tool.src} alt={tool.name} className={`size-full object-contain ${tool.rounded ? "rounded-[14px]" : ""}`} draggable={false} />
               </div>
             </div>
           </div>
         ))}
       </div>
 
-      {/* Center text */}
-      <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center gap-4 px-6 text-center">
-        <h2 ref={headingRef} className="text-4xl font-extrabold uppercase tracking-tight sm:text-5xl lg:text-6xl">
-          <span className="bg-gradient-to-r from-amber-500 via-amber-600 to-amber-700 bg-clip-text text-transparent">Tools We Work With</span>
+      <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center px-6 text-center">
+        <span
+          ref={badgeRef}
+          className="inline-block rounded-full border px-3.5 py-1.5 text-[12.5px] font-bold tracking-[0.02em]"
+          style={{ color: "#123CE8", borderColor: "#123CE859" }}
+        >
+          Integrations
+        </span>
+        <h2 ref={headingRef} className="mt-4 text-center text-[clamp(32px,4.4vw,62px)] leading-[1.04] font-extrabold uppercase tracking-tight">
+          <span className="bg-linear-to-r from-blue-600 via-indigo-600 to-blue-950 bg-clip-text text-transparent">
+            The Tools Behind
+            <br />
+            the Growth
+          </span>
         </h2>
-        <p ref={paraRef} className="max-w-md text-lg text-tertiary/60 sm:text-xl">
-          We integrate seamlessly with the platforms that power your business.
-        </p>
       </div>
     </section>
   );

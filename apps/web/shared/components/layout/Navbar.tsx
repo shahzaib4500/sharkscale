@@ -1,23 +1,29 @@
 "use client";
 import logo from "@shared/assets/logo.webp";
-import DotsToPlusIcon from "@shared/components/layout/DotsToPlusIcon";
+import DotsToPlusIcon, { type DotsToPlusIconHandle } from "@shared/components/layout/DotsToPlusIcon";
 import NavOverlay from "@shared/components/layout/NavOverlay";
 import { colors } from "@shared/constants/colors";
-import { navLinks } from "@shared/lib/navLinks";
-import { ArrowRight } from "lucide-react";
+import { navLinks, pageLinks } from "@shared/lib/navLinks";
+import { BOOK_SECTION_ID, HOME_SECTION_ID, SECTION_LINK_HREF, handleSectionNavClick, navigateToSection } from "@shared/lib/scrollToSection";
+import { CalendarCheck } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useState, useEffect } from "react";
+import { useLayoutEffect, useRef, useState } from "react";
 
 export default function Navbar() {
-  const homeHref = navLinks.find((link) => link.label === "Home")?.href ?? "#";
-  const contactHref = "#contactUs";
-
+  const menuIconRef = useRef<DotsToPlusIconHandle>(null);
   const [showOverlay, setShowOverlay] = useState(false);
   const [scrollProgress, setScrollProgress] = useState(0);
-  const [isLight, setIsLight] = useState(false);
+  const [isLight, setIsLight] = useState(true);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
+    const hash = window.location.hash.replace(/^#/, "");
+    if (hash) {
+      navigateToSection(hash);
+    }
+  }, []);
+
+  useLayoutEffect(() => {
     let ticking = false;
 
     const update = () => {
@@ -61,8 +67,8 @@ export default function Navbar() {
 
   const currentHeight = maxHeight - (maxHeight - minHeight) * scrollProgress;
   const horizontalInset = 16 + scrollProgress * 8;
-  const minLogoHeight = 36;
-  const maxLogoHeight = 56;
+  const minLogoHeight = 48;
+  const maxLogoHeight = 72;
   const logoHeight = maxLogoHeight - (maxLogoHeight - minLogoHeight) * scrollProgress;
   const gapScale = 1 - scrollProgress * 0.3;
 
@@ -92,12 +98,19 @@ export default function Navbar() {
         }}
       >
         <div className="grid w-full grid-cols-[auto_1fr_auto] items-center px-6 h-full" style={{ gap: `${24 * gapScale}px` }}>
-          <Link href={homeHref} className="flex items-center shrink-0">
+          <Link href={SECTION_LINK_HREF} onClick={handleSectionNavClick(HOME_SECTION_ID)} className="flex items-center shrink-0">
             <Image src={logo} alt="SharkScale" priority draggable={false} className="w-auto" style={{ height: `${logoHeight}px` }} />
           </Link>
 
           <ul className="hidden items-center justify-center lg:flex shrink-0" style={{ gap: `${32 * gapScale}px` }}>
             {navLinks.map((link) => (
+              <li key={link.sectionId}>
+                <Link href={SECTION_LINK_HREF} onClick={handleSectionNavClick(link.sectionId)} className={linkClass}>
+                  {link.label}
+                </Link>
+              </li>
+            ))}
+            {pageLinks.map((link) => (
               <li key={link.href}>
                 <Link href={link.href} className={linkClass}>
                   {link.label}
@@ -108,24 +121,36 @@ export default function Navbar() {
 
           <div className="flex items-center justify-end gap-3 shrink-0">
             <Link
-              href={contactHref}
+              href={SECTION_LINK_HREF}
+              aria-label={scrollProgress > 0.7 ? "Book a call" : undefined}
               className="hidden items-center gap-2.5 rounded-full py-1.5 pl-4 pr-1.5 text-sm font-semibold transition-colors hover:bg-primary hover:text-white lg:inline-flex"
               style={{ backgroundColor: `${accent}1A`, color: accent }}
+              onClick={handleSectionNavClick(BOOK_SECTION_ID)}
             >
               <span style={{ display: scrollProgress > 0.7 ? "none" : "inline" }}>Book a Call</span>
               <span className="flex size-7 items-center justify-center rounded-full shrink-0" style={{ backgroundColor: `${accent}1F`, color: accent }}>
-                <ArrowRight className="size-3.5" />
+                <CalendarCheck className="size-3.5" strokeWidth={2.25} aria-hidden />
               </span>
             </Link>
 
             <button
               type="button"
-              aria-label="Open menu"
-              onClick={() => setShowOverlay(true)}
+              aria-label={showOverlay ? "Close menu" : "Open menu"}
+              aria-expanded={showOverlay}
+              onClick={() => {
+                menuIconRef.current?.animateToPlus();
+                setShowOverlay(true);
+              }}
+              onMouseEnter={() => menuIconRef.current?.animateToPlus()}
+              onMouseLeave={() => {
+                if (!showOverlay) {
+                  menuIconRef.current?.animateToDots();
+                }
+              }}
               className="flex size-10 items-center justify-center rounded-full transition-colors hover:bg-primary shrink-0"
               style={{ backgroundColor: `${accent}1A` }}
             >
-              <DotsToPlusIcon color={accent} />
+              <DotsToPlusIcon ref={menuIconRef} color={accent} menuOpen={showOverlay} />
             </button>
           </div>
         </div>

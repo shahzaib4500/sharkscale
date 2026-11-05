@@ -27,19 +27,27 @@ export default function BookACall() {
   }, []);
 
   return (
-    <section
-      id="contactUs"
-      data-nav-theme="light"
-      className="flex flex-col items-center px-4 pt-24 pb-28 text-tertiary sm:px-12 lg:px-24 xl:px-40"
-      style={{ background: "#ffffff" }}
-    >
+    <section data-nav-theme="light" className="flex flex-col items-center bg-white px-6 py-20 sm:px-10 sm:py-28">
       <link rel="stylesheet" href="https://assets.calendly.com/assets/external/widget.css" />
 
-      <h2 className="mb-3 text-center text-4xl font-extrabold uppercase tracking-tight sm:text-5xl lg:text-6xl">Book a Call</h2>
-      <p className="mb-8 max-w-lg text-center text-tertiary/70">Schedule a consultation with our team to discuss how we can help scale your email revenue.</p>
+      <span
+        className="inline-block rounded-full border px-3.5 py-1.5 text-[12.5px] font-bold tracking-[0.02em]"
+        style={{ color: "#123CE8", borderColor: "#123CE859" }}
+      >
+        Free teardown
+      </span>
 
-      <div className="w-full max-w-3xl">
-        <div ref={widgetRef} style={{ minWidth: 320, height: 900 }} />
+      <h2 className="mt-4 text-center text-[clamp(32px,4.4vw,62px)] leading-[1.04] font-bold tracking-tight text-[#12141F]">
+        Let&apos;s Find the Money You&apos;re Missing
+      </h2>
+      <p className="mt-4 max-w-lg text-center text-[16.5px] leading-relaxed text-[#12141F]/70">
+        Give us 30 minutes and your Klaviyo. We&apos;ll find the gaps, missed opportunities, and quick wins that could be costing your brand revenue.
+      </p>
+
+      <div className="mt-12 w-full max-w-3xl">
+        <div className="overflow-hidden rounded-3xl border border-black/8 bg-white shadow-[0_30px_90px_-35px_rgba(10,16,51,0.18)]">
+          <div ref={widgetRef} style={{ minWidth: 320, height: 900 }} />
+        </div>
       </div>
 
       <Script src="https://assets.calendly.com/assets/external/widget.js" strategy="afterInteractive" onLoad={initWidget} />

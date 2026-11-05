@@ -1,39 +1,24 @@
 "use client";
+import fatimah from "@shared/assets/fatimah.webp";
+import shazaib from "@shared/assets/shazaib.webp";
+import yasir from "@shared/assets/yasir.webp";
+import zarlish from "@shared/assets/zarlish.webp";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import Image from "next/image";
+import Image, { type StaticImageData } from "next/image";
 import { useEffect, useRef } from "react";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
 }
 
-const IK_BASE = "https://ik.imagekit.io/isclzlt7q/humaan-v6-production/images/";
-const IK_PARAMS = "?tr=w-456,h-560,q-80";
-
-function ikImage(file: string): string {
-  return IK_BASE + file + IK_PARAMS;
-}
-
-type Member = { name: string; role: string; image: string };
+type Member = { name: string; role: string; image: StaticImageData };
 
 const members: Member[] = [
-  { name: "Teegan", role: "Front-end Developer", image: ikImage("teegan-898106_8W3C1qCTk.jpg") },
-  { name: "Sam", role: "Front-end Developer", image: ikImage("sam-694032_p55PEwgty.jpg") },
-  { name: "Jay", role: "Founder & CEO", image: ikImage("jay-694037_NiFRHfcts.jpg") },
-  { name: "Lee", role: "Technical Director", image: ikImage("lee-278426_0_RTv426f.jpg") },
-  { name: "Janmay", role: "Mobile Developer", image: ikImage("Janmay__1fgD4B2D.jpg") },
-  { name: "Niaal", role: "Agency Director", image: ikImage("niaal-694006_8enhClHjn.jpg") },
-  { name: "Jodie", role: "Production Manager", image: ikImage("jodie-119355524838181_WXzi0_nfE.jpg") },
-  { name: "Ross", role: "Back-end Developer", image: ikImage("ross-278438_TDeSH2knK.jpg") },
-  { name: "Matt", role: "Back-end Developer", image: ikImage("matt-1302546_fTHhuKGSQ.jpg") },
-  { name: "Dan", role: "Creative Director", image: ikImage("dan-694038_Rp6I5c4EF.jpg") },
-  { name: "DT", role: "Back-end Developer", image: ikImage("dt-694039_JjuR13QgW.jpg") },
-  { name: "Jess", role: "Designer", image: ikImage("ross-jess-289004_Cd807V1Pl.jpg") },
-  { name: "Dedy", role: "Back-end Developer", image: ikImage("dedy-278440_S0uv3Re5v.jpg") },
-  { name: "Jasmine", role: "Designer", image: ikImage("jasmine-292655_8C2hrOaCA.jpg") },
-  { name: "Paul", role: "Implementation Director", image: ikImage("paul-278430_k4jUEP3w_.jpg") },
-  { name: "Alistair", role: "SEO Specialist", image: ikImage("alistair-898108_cYfS_p1wQ.jpg") }
+  { name: "Shahzaib Farooq", role: "Founder and CEO", image: shazaib },
+  { name: "Yasir Khalil", role: "Co-founder and Marketing Lead", image: yasir },
+  { name: "Zarlish Farooq", role: "Co-founder and Human Resource Lead", image: zarlish },
+  { name: "Fatima Ali", role: "Human Resource Executive", image: fatimah }
 ];
 
 const COLUMN_COUNT = 4;
@@ -51,18 +36,19 @@ function buildColumns(): Member[][] {
 
 function TeamCard({ member, cardRef }: { member: Member; cardRef: (el: HTMLDivElement | null) => void }) {
   return (
-    <div ref={cardRef} className="relative overflow-hidden rounded-2xl" style={{ aspectRatio: "456 / 560", willChange: "transform, opacity" }}>
+    <div ref={cardRef} className="group relative overflow-hidden rounded-2xl" style={{ aspectRatio: "456 / 560", willChange: "transform, opacity" }}>
       <Image
         src={member.image}
         alt={member.name}
         fill
         draggable="false"
         sizes="(max-width: 640px) 45vw, (max-width: 1024px) 30vw, 22vw"
+        className="rounded-2xl transition-transform duration-500 ease-out group-hover:scale-95"
         style={{ objectFit: "cover" }}
       />
-      <div className="absolute inset-x-3 bottom-3 flex flex-col rounded-xl bg-white/90 px-4 py-2.5 backdrop-blur-sm">
-        <span className="text-sm font-semibold text-tertiary sm:text-base">{member.name}</span>
-        <span className="text-xs text-tertiary/60 sm:text-sm">{member.role}</span>
+      <div className="absolute inset-x-3 bottom-3 flex flex-col rounded-xl bg-white/90 px-4 py-2.5 backdrop-blur-sm transition-transform duration-500 ease-out group-hover:-translate-y-0.5">
+        <span className="text-sm font-semibold text-[#12141F] sm:text-base">{member.name}</span>
+        <span className="text-xs text-[#12141F]/60 sm:text-sm">{member.role}</span>
       </div>
     </div>
   );
@@ -149,19 +135,21 @@ export default function Team() {
   let cardIndex = 0;
 
   return (
-    <section
-      ref={sectionRef}
-      data-nav-theme="light"
-      className="relative overflow-hidden px-6 pt-24 pb-40 sm:px-10 lg:px-16 lg:pb-48"
-      style={{ background: "linear-gradient(180deg, #f5f0e8 0%, #f5f0e8 82%, #ffffff 100%)" }}
-    >
+    <section ref={sectionRef} data-nav-theme="light" className="relative overflow-hidden bg-white px-6 pt-24 pb-40 sm:px-10 lg:px-16 lg:pb-48">
       <div ref={headingRef} className="mx-auto mb-16 max-w-3xl text-center">
-        <span className="text-xs font-bold uppercase tracking-[0.22em] text-tertiary/50">Our People</span>
-        <h2 className="mt-4 text-4xl font-extrabold uppercase tracking-tight text-tertiary sm:text-5xl lg:text-6xl">Meet the Team</h2>
-        <p className="mt-4 text-lg text-tertiary/60">The people behind the campaigns that scale your brand.</p>
+        <span
+          className="inline-block rounded-full border px-3.5 py-1.5 text-[12.5px] font-bold tracking-[0.02em]"
+          style={{ color: "#123CE8", borderColor: "#123CE859" }}
+        >
+          Our people
+        </span>
+        <h2 className="mt-4 text-[clamp(32px,4.4vw,62px)] leading-[1.04] font-bold tracking-[-0.04em] text-[#12141F]">Meet Your Retention Team</h2>
+        <p className="mt-4 text-lg" style={{ color: "rgba(18,20,31,0.6)" }}>
+          The sharks behind the emails that scale your brand.
+        </p>
       </div>
 
-      <div className="mx-auto grid max-w-6xl grid-cols-2 gap-4 lg:grid-cols-4 lg:gap-6">
+      <div className="mx-auto grid max-w-6xl grid-cols-2 gap-4 pt-20 sm:pt-28 lg:grid-cols-4 lg:gap-6 lg:pt-36">
         {columns.map((column, columnIndex) => (
           <div
             key={columnIndex}

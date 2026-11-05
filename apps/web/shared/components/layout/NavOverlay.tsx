@@ -1,7 +1,7 @@
 "use client";
-import RollingText from "@shared/components/layout/RollingText";
 import { colors } from "@shared/constants/colors";
-import { navLinks } from "@shared/lib/navLinks";
+import { navLinks, pageLinks } from "@shared/lib/navLinks";
+import { SECTION_LINK_HREF, handleSectionNavClick } from "@shared/lib/scrollToSection";
 import gsap from "gsap";
 import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -64,11 +64,11 @@ export default function NavOverlay({ onClose }: NavOverlayProps) {
 
   return (
     <>
-      <div ref={backdropRef} className="fixed inset-0 z-[998]" style={{ opacity: 0 }} onClick={handleClose} />
+      <div ref={backdropRef} className="fixed inset-0 z-998" style={{ opacity: 0 }} onClick={handleClose} />
 
       <div
         ref={cardRef}
-        className="fixed right-4 top-24 z-[999] w-72 max-w-[calc(100vw-2rem)] rounded-2xl p-5 shadow-2xl"
+        className="fixed right-4 top-24 z-999 w-72 max-w-[calc(100vw-2rem)] rounded-2xl p-5 shadow-2xl"
         style={{ backgroundColor: colors.white }}
       >
         <p className="mb-3 text-xs font-medium uppercase tracking-widest" style={{ color: `${colors.tertiary}80` }}>
@@ -78,13 +78,27 @@ export default function NavOverlay({ onClose }: NavOverlayProps) {
         <nav className="flex flex-col gap-1">
           {navLinks.map((link) => (
             <Link
+              key={link.sectionId}
+              href={SECTION_LINK_HREF}
+              onClick={(event) => {
+                handleSectionNavClick(link.sectionId)(event);
+                handleClose();
+              }}
+              className="inline-flex w-fit py-1 text-2xl font-semibold tracking-tight transition-[color,transform,opacity] duration-200 ease-out hover:translate-x-0.5 hover:opacity-80 active:translate-x-1 active:opacity-70 motion-reduce:transform-none"
+              style={{ color: colors.tertiary }}
+            >
+              {link.label}
+            </Link>
+          ))}
+          {pageLinks.map((link) => (
+            <Link
               key={link.href}
               href={link.href}
               onClick={handleClose}
-              className="group inline-flex w-fit py-1 text-2xl font-semibold tracking-tight"
+              className="inline-flex w-fit py-1 text-2xl font-semibold tracking-tight transition-[color,transform,opacity] duration-200 ease-out hover:translate-x-0.5 hover:opacity-80 active:translate-x-1 active:opacity-70 motion-reduce:transform-none"
               style={{ color: colors.tertiary }}
             >
-              <RollingText text={link.label} />
+              {link.label}
             </Link>
           ))}
         </nav>

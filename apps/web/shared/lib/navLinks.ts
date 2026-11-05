@@ -1,10 +1,18 @@
 export interface NavLink {
   label: string;
-  href: string;
+  sectionId: string;
 }
 
 export const navLinks: NavLink[] = [
-  { label: "Home", href: "#home" },
-  { label: "Services", href: "#services" },
-  { label: "Our Work", href: "#ourWork" }
+  { label: "Home", sectionId: "home" },
+  { label: "What We Do", sectionId: "what-we-do" },
+  { label: "Reviews", sectionId: "reviews" }
 ];
+
+export interface PageLink {
+  label: string;
+  href: string;
+}
+
+/** Links to separate pages, shown after the homepage section links. */
+export const pageLinks: PageLink[] = [{ label: "Blog", href: "/blog" }];

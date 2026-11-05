@@ -1,12 +1,10 @@
+import { navLinks, pageLinks } from "@shared/lib/navLinks";
+import { BOOK_SECTION_ID } from "@shared/lib/scrollToSection";
+
 export const footerContent = {
-  tickerItems: ["Scale With Confidence", "Full-Stack Solutions", "Built For Growth", "MERN Specialists", "Launching Ideas", "SharkScale"],
-  links: [
-    { label: "Services", href: "#services" },
-    { label: "Our Work", href: "#ourWork" },
-    { label: "Contact Us", href: "#contactUs" },
-    { label: "LinkedIn", href: "https://linkedin.com" }
-  ],
-  legalLinks: [],
-  address: "Islamabad, Pakistan",
+  navLinks: [...navLinks, ...pageLinks],
+  connectLinks: [{ label: "Contact Us", sectionId: BOOK_SECTION_ID }],
+  legalLinks: [] as { label: string; href: string }[],
+  tagline: "Email & retention marketing, built to scale",
   copyright: `© ${new Date().getFullYear()} SharkScale. All rights reserved.`
 };

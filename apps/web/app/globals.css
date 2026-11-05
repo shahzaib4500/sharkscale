@@ -140,15 +140,16 @@
   }
 }
 
-@media (pointer: fine) {
-  * {
-    cursor: none !important;
-  }
-}
-
 html.custom-cursor-active,
 html.custom-cursor-active * {
   cursor: none !important;
+}
+
+html.custom-cursor-active input,
+html.custom-cursor-active textarea,
+html.custom-cursor-active select,
+html.custom-cursor-active [contenteditable="true"] {
+  cursor: auto !important;
 }
 
 @keyframes footer-breathe {
@@ -162,11 +163,181 @@ html.custom-cursor-active * {
   }
 }
 
-@keyframes ticker-scroll {
+@keyframes brand-ticker-scroll {
   from {
-    transform: translateX(0);
-  }
-  to {
     transform: translateX(-50%);
   }
+  to {
+    transform: translateX(0);
+  }
+}
+
+.brand-ticker-track {
+  animation: brand-ticker-scroll 22s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .brand-ticker-track {
+    animation: none;
+  }
+}
+
+@keyframes hero-float {
+  0%,
+  100% {
+    translate: 0 0;
+  }
+  50% {
+    translate: 0 -12px;
+  }
+}
+
+@keyframes hero-glow {
+  0%,
+  100% {
+    opacity: 0.55;
+  }
+  50% {
+    opacity: 0.9;
+  }
+}
+
+@keyframes hero-phrase-in {
+  from {
+    opacity: 0;
+    transform: translateY(0.35em);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes hero-highlight-draw {
+  from {
+    transform: scaleX(0);
+    opacity: 0.4;
+  }
+  to {
+    transform: scaleX(1);
+    opacity: 1;
+  }
+}
+
+@keyframes hero-highlight-pulse {
+  0%,
+  100% {
+    opacity: 1;
+    filter: brightness(1);
+  }
+  50% {
+    opacity: 0.85;
+    filter: brightness(1.08);
+  }
+}
+
+.hero-float {
+  animation: hero-float 6.5s ease-in-out infinite;
+}
+
+.hero-glow {
+  animation: hero-glow 5.5s ease-in-out infinite;
+}
+
+.hero-phrase {
+  display: inline-block;
+  animation: hero-phrase-in 700ms cubic-bezier(0.22, 1, 0.36, 1) 180ms both;
+}
+
+.hero-highlight {
+  transform-origin: left center;
+  animation:
+    hero-highlight-draw 650ms cubic-bezier(0.22, 1, 0.36, 1) 520ms both,
+    hero-highlight-pulse 2.8s ease-in-out 1.2s infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-float,
+  .hero-glow,
+  .hero-phrase,
+  .hero-highlight {
+    animation: none;
+  }
+}
+
+/* ─── Blog editor (admin) ─────────────────────────────────────────────────── */
+.blog-editor .ProseMirror {
+  min-height: 26rem;
+  padding: 1.5rem clamp(1rem, 3vw, 1.75rem);
+  color: #12141f;
+  font-size: 1rem;
+  line-height: 1.75;
+  outline: none;
+}
+
+.blog-editor .ProseMirror > * + * {
+  margin-top: 1rem;
+}
+
+.blog-editor .ProseMirror :is(h1, h2, h3, h4) {
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.2;
+  margin-top: 1.6rem;
+}
+
+.blog-editor .ProseMirror h1 {
+  font-size: 2.1rem;
+}
+
+.blog-editor .ProseMirror h2 {
+  font-size: 1.6rem;
+}
+
+.blog-editor .ProseMirror h3 {
+  font-size: 1.25rem;
+}
+
+.blog-editor .ProseMirror h4 {
+  font-size: 1.05rem;
+}
+
+.blog-editor .ProseMirror ul {
+  list-style: disc;
+  padding-left: 1.5rem;
+}
+
+.blog-editor .ProseMirror ol {
+  list-style: decimal;
+  padding-left: 1.5rem;
+}
+
+.blog-editor .ProseMirror blockquote {
+  padding: 0.75rem 1rem;
+  border-left: 3px solid var(--secondary);
+  border-radius: 0.5rem;
+  background: #f5f0e8;
+  font-weight: 600;
+}
+
+.blog-editor .ProseMirror a {
+  color: #2f5bff;
+  text-decoration: underline;
+}
+
+.blog-editor .ProseMirror img {
+  max-width: 100%;
+  border-radius: 0.75rem;
+}
+
+.blog-editor .ProseMirror img.ProseMirror-selectednode {
+  outline: 3px solid #2f5bff;
+}
+
+.blog-editor .ProseMirror p.is-editor-empty:first-child::before {
+  content: attr(data-placeholder);
+  float: left;
+  height: 0;
+  color: rgb(0 0 0 / 35%);
+  pointer-events: none;
 }

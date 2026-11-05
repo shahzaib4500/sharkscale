@@ -26,7 +26,7 @@
     },
     "nextjs#build": {
       "dependsOn": ["^build"],
-      "env": ["NEXT_PUBLIC_BACKEND_URL"],
+      "env": ["NEXT_PUBLIC_BACKEND_URL", "NEXT_PUBLIC_SUPABASE_URL", "NEXT_PUBLIC_SUPABASE_ANON_KEY", "NEXT_PUBLIC_SITE_URL"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
       "outputs": [".next/**", "!.next/cache/**", "!.next/dev/**"]
     },
