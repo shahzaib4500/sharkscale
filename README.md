@@ -2,6 +2,8 @@
 
 A full-stack monorepo built with [Turborepo](https://turbo.build/repo), featuring a NestJS API and a Next.JS web app with shared DTOs.
 
+> **Blog, admin panel and hosting:** see [`docs/BLOG_AND_DEPLOYMENT.md`](docs/BLOG_AND_DEPLOYMENT.md) for the `/blog` and `/admin` setup, Supabase, Vercel and DNS.
+
 ## Stack
 
 | Layer    | Technology                                    |
